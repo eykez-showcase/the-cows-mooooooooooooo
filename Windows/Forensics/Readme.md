@@ -1,0 +1,32 @@
+# Some Common Forensic/CTF Problems and techniques.
+### Quick reference for common techniques and problems sorted by type
+
+- Networking
+  - Shared Folders
+  - Ports
+  - Wireshark
+  - DNS
+  - Logs
+- Cryptography
+  - Hashing
+  - Common Ciphers
+  - Stegonography
+  - Password Recovery
+- Users
+  - Permissions
+  - Accounts
+  - Folders
+  - Media Files
+  - Activity
+- File System
+  - File Integrity
+  - Data Recovery
+  - Metadata
+  - Security
+  - File Access
+- Programs
+   - Suspicous Programs
+   - Autoruns
+- others
+  - Malware Analysis
+  - Web exploitation
