@@ -1,8 +1,8 @@
 # Some Common Forensic/CTF Problems and techniques.
-### Quick reference for common techniques and problems sorted by type
+### Quick Reference for Common Forensics-Related Techniques and Problems Sorted By Type
 
 - Networking
-  - [Shared Folders](/Networking/Shared_Folders.md)
+  - [Shared Folders](/Windows/Forensics/Networking/Shared_Folders.md)
   - Ports
   - Wireshark
   - DNS
