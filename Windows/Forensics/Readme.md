@@ -3,15 +3,15 @@
 
 - [Networking](/Windows/Forensics/Networking)
   - [Shared Folders](/Windows/Forensics/Networking/Shared_Folders.md)
-  - [Ports](/Windows/Forensics/Networking/Ports)
-  - [Wireshark](/Windows/Forensics/Networking/Wireshark)
-  - [DNS](/Windows/Forensics/Networking/DNS)
-  - [Logs](/Windows/Forensics/Networking/Logs)
-- [Cryptography](/Windows/Forensics/Cryptography)
-  - [Hashing](/Windows/Forensics/Cryptography/Hashing)
-  - [Common Ciphers](/Windows/Forensics/Cryptography/Common_Ciphers)
-  - [Stegonography](/Windows/Forensics/Cryptography/Stegonography)
-  - [Password Recovery](/Windows/Forensics/Cryptography/Password_Recovery)
+  - [Ports](/Windows/Forensics/Networking/Ports.md)
+  - [Wireshark](/Windows/Forensics/Networking/Wireshark.md)
+  - [DNS](/Windows/Forensics/Networking/DNS.md)
+  - [Logs](/Windows/Forensics/Networking/Logs.md)
+- [Cryptography](/Windows/Forensics/Cryptography.md)
+  - [Hashing](/Windows/Forensics/Cryptography/Hashing.md)
+  - [Common Ciphers](/Windows/Forensics/Cryptography/Common_Ciphers.md)
+  - [Stegonography](/Windows/Forensics/Cryptography/Stegonography.md)
+  - [Password Recovery](/Windows/Forensics/Cryptography/Password_Recovery.md)
 - Users
   - Permissions
   - Accounts
