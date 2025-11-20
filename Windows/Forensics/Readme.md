@@ -2,7 +2,7 @@
 ### Quick reference for common techniques and problems sorted by type
 
 - Networking
-  - Shared Folders
+  - [Shared Folders](/Networking/Shared_Folders.md)
   - Ports
   - Wireshark
   - DNS
