@@ -1,17 +1,17 @@
 # Some Common Forensic/CTF Problems and techniques.
 ### Quick Reference for Common Forensics-Related Techniques and Problems Sorted By Type
 
-- Networking
+- [Networking](/Windows/Forensics/Networking)
   - [Shared Folders](/Windows/Forensics/Networking/Shared_Folders.md)
-  - Ports
-  - Wireshark
-  - DNS
-  - Logs
-- Cryptography
-  - Hashing
-  - Common Ciphers
-  - Stegonography
-  - Password Recovery
+  - [Ports](/Windows/Forensics/Networking/Ports)
+  - [Wireshark](/Windows/Forensics/Networking/Wireshark)
+  - [DNS](/Windows/Forensics/Networking/DNS)
+  - [Logs](/Windows/Forensics/Networking/Logs)
+- [Cryptography](/Windows/Forensics/Cryptography)
+  - [Hashing](/Windows/Forensics/Cryptography/Hashing)
+  - [Common Ciphers](/Windows/Forensics/Cryptography/Common_Ciphers)
+  - [Stegonography](/Windows/Forensics/Cryptography/Stegonography)
+  - [Password Recovery](/Windows/Forensics/Cryptography/Password_Recovery)
 - Users
   - Permissions
   - Accounts
