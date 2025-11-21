@@ -64,7 +64,7 @@ A version number confirms installation.
 
 ### **Opening Files**
 
-  Go to **Files  → Open a File**
+  Go to **Files → Open a File**
 
 ### **Interfaces**
 
@@ -139,47 +139,52 @@ First part filters for connections attempting tp synchronize, Second part Filter
 ```
 icmp.type == 8
 ```
+Looking for ping requests, which can indicate network mapping, reconnaissance or exfiltration
 
-
-### ** Cleartext Credential Filters**
+### **Cleartext Credential Filters**
 
 ```
 ftp.request.command == "USER"
-http.authbasic
 ```
+Searches for Packets that contain a Username
 
-### ** Remove Noise**
+```
+ftp.request.command == "PASS"
+```
+Searches for Packets that contain a Password
+
+```
+ftp.response.code == 230
+```
+Searches for packets returning a 230, this means that a succesful password was given.
+View the entire conversation by **Right-Click → Follow Conversation → TCP**
+
+### **Remove Noise**
+#### Only Do this if you are unsure what protocol to look through
 
 ```
 !(mdns || nbns || ipv6)
 ```
+Removing the frequent and unusable data
 
 ---
 
-# **Common Tasks**
+# **Common Uses**
 
-## **1. Identify Unauthorized Remote Access**
+## **Identifying Unauthorized Remote Access**
 
 Look for:
 
-* SSH attempts
+* SSH attempts (`tcp.port == 22`)
 * RDP (`tcp.port == 3389`)
 * Telnet (`tcp.port == 23`)
-* VNC
+* VNC (`tcp.port == 5900`)
 
-Relevant filters:
+Check packet for:
 
-```
-tcp.port == 22
-tcp.port == 3389
-tcp.port == 23
-```
-
-Check packet details for:
-
-* Username attempts
-* Source IP (outside LAN)
-* Brute-force attempts
+* Plaintext Credentials
+* Foreign Source IP
+* Brute-force attempts(repeated attempts with slight changes)
 
 ---
 
@@ -192,13 +197,13 @@ Common cleartext protocols:
 * Telnet
 * POP3/SMTP (non-SSL)
 
-Filters:
+Filters to look for:
 
 ```
 ftp || http || telnet
 ```
 
-Search for password strings:
+Search for passwords:
 
 ```
 frame contains "pass"
@@ -209,75 +214,64 @@ frame contains "login"
 
 ## **3. Detect Malware / Backdoor Behavior**
 
-Suspicious:
+Signifiers of an attack:
 
-* Repeated outbound connections to unknown IPs
-* Traffic on high ports (>1024)
-* Regular beaconing every 5 seconds
-
-Filters:
-
-```
-tcp.flags.syn == 1
-tcp.port >= 1024
-ip.dst != 192.168.0.0/16
-```
+* Repeated outbound connections to unknown IPs `tcp.flags.syn == 1`
+* Traffic on high ports (>1024) `tcp.port >= 1024`
+* Regular scanning every 5 seconds `ip.dst != 192.168.0.0/16`
 
 ---
 
-## **4. Analyze DNS Abuse**
+## **4. Analyze DNS**
 
-Look for:
+Signifiers of an error:
 
 * DNS tunneling
 * Long/excessive domain queries
 * Random-looking subdomains
 
-Filters:
-
 ```
 dns && dns.qry.name contains "."
 ```
 
-Check if responses map to strange IPs.
+Check for Strange IPs
 
 ---
 
 # **Identifying Malicious Traffic**
 
-## **Red Flags to Look For**
 
-| Behavior                            | Why It’s Suspicious       |
-| ----------------------------------- | ------------------------- |
-| Repeated SYN packets without ACKs   | Port scan                 |
-| Cleartext login attempts            | Password stealing         |
-| Connections to foreign IPs          | Possible C2 beaconing     |
-| Rapid DNS queries                   | Malware communication     |
-| FTP or Telnet usage                 | Legacy insecure protocols |
-| HTTP sending base64-looking strings | Credential exfiltration   |
+| Behavior                            | Signifies?                  |
+| ----------------------------------- | --------------------------- |
+| Repeated SYN packets without ACKs   | Port scanning attempt       |
+| Cleartext login attempts            | Password stealing           |
+| Connections to foreign IPs          | Possible backdoors          |
+| Rapid DNS queries                   | Malware communication       |
+| FTP or Telnet usage                 | Plaintext Insecure protocols|
+| HTTP sending base64-looking strings | Credential exfiltration     |
 
 ---
 
-# **Exporting & Saving Evidence**
+# **Saving Pcap Files**
 
-### **1. Export a Single Packet**
+### **Export a Single Packet**
 
 **File → Export Packet Bytes**
 
-### **2. Export Specific Conversations**
+### **Export Specific Conversations**
 
 **Analyze → Follow TCP Stream**
 Then click **Save As**.
 
-### **3. Export filtered packets only**
+### **Export filtered packets only**
 
-Apply your filter, then:
+Apply your desired filter if necessary, then:
 
 ```
 File → Export Specified Packets
 ```
 
-### **4. Create a PCAP for a Report**
+### **Save as a PCAP**
 
 ```
 File → Save As → suspicious_traffic.pcapng
@@ -285,7 +279,7 @@ File → Save As → suspicious_traffic.pcapng
 
 ---
 
-# **Performance Tips for Competition**
+# **Quick Tips & Tricks**
 
 * Pause capture when filtering to reduce lag
 * [Disable IPv6](Windows/Settings/Networking/IPV6) on the system to reduce noise
