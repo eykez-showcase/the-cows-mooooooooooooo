@@ -4,7 +4,10 @@
  * [Overview](/Windows/Forensics/Networking/Shared_Folders.md#Overview)
  * [GUI](/Windows/Forensics/Networking/Shared_Folders.md#GUI)
  * [Command Line](/Windows/Forensics/Networking/Shared-Folders.md#Command-Line)
- * []
+ * [Powershell](/Windows/Forensics/Networking/Shared-Folders.md#PowerShell)
+ * [Misc](/Windows/Forensics/Networking/Shared-Folders.md#Misc)
+ * [Reference Table](/Windows/Forensics/Networking/Shared-Folders.md#Reference-Table)
+ * [OS Compatibility](/Windows/Forensics/Networking/Shared-Folders.md#OS-Compatibility)
 
 ## Overview
 
@@ -20,17 +23,13 @@ Key administrative tools include:
 
 ### Launching the Shared Folders Console
 
-1. Press **Win + R**  
+1. Press **Windows + R**  
 2. Enter:
-```
-
+```win+r
 fsmgmt.msc
-
-````
-3. Press **Enter**  
+```
+3. Press OK
 4. Approve the UAC admin prompt if shown
-
-This opens the **Shared Folders MMC**.
 
 ---
 
@@ -57,7 +56,7 @@ Default Shares:
 - `ADMIN$`
 - `IPC$`
 
-### Viewing Share Details
+#### Viewing Share Details
 Right-click a share → Properties
 Displays:
 - Share permissions  
@@ -65,10 +64,10 @@ Displays:
 - Path  
 - Active connections  
 
-### Stopping a Share
+#### Stopping a Share
 Right-click → **Stop Sharing**
 
-### Creating a New Share
+#### Creating a New Share
 Right-click **Shares** → **New Share**  
 Configure:
 - Folder path  
@@ -76,11 +75,10 @@ Configure:
 - Offline caching  
 - Share permissions  
 
-**Note**
-Windows **Home** editions limit creation of **administrative shares**, but standard shares work normally.
-
+	**Note**
+	Windows **Home** editions limit creation of **administrative shares**, but standard shares work normally.
+	
 ---
-
 ### Open Files
 
 Displays files opened through network shares.
@@ -89,9 +87,9 @@ For each file:
 - File path  
 - Accessing user  
 - System lock status  
-- # of locks  
+- \# of locks  
 
-### Closing an Open File
+#### Closing an Open File
 Right-click → **Close Open File**  
 Useful to:
 - Release file locks  
@@ -102,59 +100,28 @@ Useful to:
 
 ## Command Line
 
-Command-line tools provide fast, scriptable auditing and remote administration.
+The command line offers greater control in a much more resource efficient way
 
 ---
 
-### View All Shares
+### Share Commands
 
-```cmd
-net share
-````
-
-Displays share name, path, and description.
-
----
-
-### Create a Share
-
-```cmd
-net share Sharename=C:\Path\Folder /GRANT:User,READ
-```
-
-Examples of permission options:
-
-* `/GRANT:User,READ`
-* `/GRANT:User,FULL`
+|                   | **Command**                                     | Extra Info                                                                              |
+| ----------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| View All Shares   | `net share`                                     | Displays share name, path, and description.                                             |
+| Create a Share    | `net share <sharename>=<path>`                  | Creates a share called \<sharename> at path \<path>. Make sure \<path> is absolute path |
+| Grant Permissions | `net share <sharename> \GRANT:<user>,<options>` | Options include read, change and full                                                   |
+| Delete Share      | `net share <sharename> /delete`                 | Deletes active share \<sharename>                                                       |
 
 ---
 
-### Delete a Share
+### Session Commands
 
-```cmd
-net share Sharename /delete
-```
-
----
-
-### List Active SMB Sessions
-
-```cmd
-net session
-```
-
-Displays:
-
-* Remote clients
-* Usernames
-* Open file counts
-* Idle time
-
-### Close a Specific Session
-
-```cmd
-net session \\RemoteHost /delete
-```
+|                     | **Command**                    | **Extra Info**                                             |
+| ------------------- | ------------------------------ | ---------------------------------------------------------- |
+| List Active session | `net session`                  | Displays: Remote clients, Usernames, Open files, Idle time |
+| Close a session     | `net session \\<name> /delete` | Closes an active session                                   |
+| Close all session   | `net session /delete`          | closes all active sessions on the computer                 |
 
 ---
 
@@ -180,57 +147,33 @@ openfiles /query
 openfiles /disconnect /id <ID>
 ```
 
-`<ID>` is from `openfiles /query`.
+`<ID>` can be obtained from `openfiles /query`.
 
 ---
 
 ## PowerShell
 
-PowerShell provides more advanced SMB management, especially on Server editions.
+PowerShell provides a more powerful command line interface. [Link to more info](/Windows/Scripting/Readme.md)
 
-### List Shares
 
-```powershell
-Get-SmbShare
-```
-
-### View Share Permissions
-
-```powershell
-Get-SmbShareAccess -Name Sharename
-```
-
-### View SMB Sessions
-
-```powershell
-Get-SmbSession
-```
-
-### View Open Files
-
-```powershell
-Get-SmbOpenFile
-```
+| Action                 | **Command**                          |
+| ---------------------- | ------------------------------------ |
+| List Shares            | `Get-SmbShare`                       |
+| View Share Permissions | `Get-SmbShareAccess -Name Sharename` |
+| View SMB Sessions      | Get-SmbSession                       |
+| View Open Files        | Get-SmbOpenFile                      |
 
 ---
 
 ### Administrative Shares
 
-Windows creates hidden administrative shares by default:
+Windows creates default & hidden administrative shares by default:
 
 | Share    | Purpose                              |
 | -------- | ------------------------------------ |
 | `C$`     | Root drive access for administrators |
 | `ADMIN$` | Remote management tools              |
 | `IPC$`   | Named pipe communication             |
-
-These shares are **normal and expected** on:
-
-* Windows 10/11 Home
-* Windows 10/11 Pro
-* Windows Server 2019/2022
-
-They should *not* be removed during forensic review; simply monitor access.
 
 ---
 
@@ -240,16 +183,19 @@ They should *not* be removed during forensic review; simply monitor access.
 
 Access events appear under:
 
-**Event Viewer → Windows Logs → Security**
+**Windows + R → eventvwr.msc → Event Viewer → Windows Logs → Security → Open**
 
 Relevant event IDs:
 
-* **5140** — Network share accessed
-* **5142** — Share created
-* **5143** — Share modified
-* **5144** — Share deleted
-* **5145** — File accessed via SMB
+| ID   | Meaning                |
+| ---- | ---------------------- |
+| 5140 | Network Share Accessed |
+| 5142 | Share Created          |
+| 5143 | Share Modified         |
+| 5144 | Share Deleted          |
+| 5145 | File Accessed via SMB  |
 
+---
 ### Network Enumeration
 
 From another machine:
@@ -258,35 +204,42 @@ From another machine:
 net view \\hostname
 ```
 
-### Unauthorized Share Indicators
+Find hostname on host computer:
 
-* Newly created shares with unusual names
-* Shares pointing to sensitive directories
-* Unexpected SMB sessions
-* High numbers of open files
+```cmd
+hostname
+```
+
+### Indicators of an Attack
+
+* Newly created shares
+* Shared sensitive directories
+* Unexpected/Unknown SMB sessions
+* High number of open files
 
 ---
 
 ## Reference Table
 
-| Task                 | GUI (FSMGMT)                  | CMD                              |
-| -------------------- | ----------------------------- | -------------------------------- |
-| View shares          | Shares                        | `net share`                      |
-| Create new share     | Right-click → New Share       | `net share ...`                  |
-| Stop/delete a share  | Right-click → Stop Sharing    | `net share <name> /delete`       |
-| View active sessions | Sessions                      | `net session`                    |
-| Close session        | Right-click → Close Session   | `net session \\host /delete`     |
-| View open files      | Open Files                    | `openfiles /query`               |
-| Close open file      | Right-click → Close Open File | `openfiles /disconnect /id <ID>` |
+|                      | GUI                                                                                     | CMD                                       |
+| -------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------- |
+| View shares          | Shares                                                                                  | `net share`                               |
+| Create new share     | Right-click → New Share                                                                 | `net share <name>=<absolute path>`        |
+| Grant Permissions    | Share Properties → Share Permissions → Add user → set **Read / Change / Full Control**. | `net share <name>  /GRANT:<user>,<perms>` |
+| Stop a share         | Right-click → Stop Sharing                                                              | `net share <name> /delete`                |
+| View active sessions | Sessions                                                                                | `net session`                             |
+| Close active session | Right-click → Close Session                                                             | `net session \\host /delete`              |
+| View open files      | Open Files                                                                              | `openfiles /query`                        |
+| Close open file      | Right-click → Close Open File                                                           | `openfiles /disconnect /id <ID>`          |
 
 ---
 
 ## OS Compatibility
 
-| Windows Edition          | Shared Folders Support                    |
-| ------------------------ | ----------------------------------------- |
-| Windows 10/11 Home       | FSMGMT supported; admin shares restricted |
-| Windows 10/11 Pro        | Full feature set                          |
-| Windows Server 2019/2022 | Full SMB, share creation, AD integration  |
+| Windows Edition          | Shared Folders Support                        |
+| ------------------------ | --------------------------------------------- |
+| Windows 10/11 Home       | FSMGMT.MSC supported; admin shares restricted |
+| Windows 10/11 Pro        | Full SMB, share creation, AD integration      |
+| Windows Server 2019/2022 | Full SMB, share creation, AD integration      |
 
 ---
