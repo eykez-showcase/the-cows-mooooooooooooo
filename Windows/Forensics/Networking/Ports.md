@@ -146,7 +146,7 @@ Net-NetFirewallRule -DisplayName "Block Port 23" -Direction Inbound -LocalPort 2
 
 If TCPView shows a program you don’t need, remove it or disable its auto-start.
 
-## **Quick Terms
+## **Quick Terms**
 | -------- | ------------------------ |
 | **Port** | A communication endpoint |
 | **Service** | Background system program |
