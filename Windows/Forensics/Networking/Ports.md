@@ -148,6 +148,7 @@ If TCPView shows a program you don’t need, remove it or disable its auto-start
 
 ## **Quick Terms**
 
+| Terms | Definition |
 | -------- | ------------------------ |
 | **Port** | A communication endpoint |
 | **Service** | Background system program |
