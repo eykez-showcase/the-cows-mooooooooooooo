@@ -142,7 +142,7 @@ Set-Service -Name "Telnet" -StartupType Disabled
 Net-NetFirewallRule -DisplayName "Block Port 23" -Direction Inbound -LocalPort 23 -Protocol TCP -Action Block
 ```
 
-### **Uninstall or Disable the Program
+### **Uninstall or Disable the Program**
 
 If TCPView shows a program you don’t need, remove it or disable its auto-start.
 
